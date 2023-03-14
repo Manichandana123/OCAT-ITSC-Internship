@@ -2,7 +2,6 @@ import { React, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { AssessmentService } from '../../services/AssessmentService';
-
 export const NewAssessment = () => {
 
   const { formState: { errors }, handleSubmit, register, reset } = useForm();
@@ -35,10 +34,10 @@ export const NewAssessment = () => {
     const created = new Date(now.getTime() - timezoneOffset * 60 * 1000);
 
     const assessmentData = {
+      catDateOfBirth: data.catDateOfBirth,
       catName: data.catName,
       created,
-      dateOfBirth: data.dateOfBirth,
-      instrumentName: `Cat Behavioral Instrument`,
+      instrumentType: `Cat Behavioral Instrument`,
       riskLevel,
       score: newScore,
     };
@@ -64,14 +63,14 @@ export const NewAssessment = () => {
         {errors.catName && <span className="text-danger">This field is required</span>}
       </div>
       <div className="mb-3">
-        <label htmlFor="dateOfBirth" className="form-label">
+        <label htmlFor="catDateOfBirth" className="form-label">
           Cat Date of Birth
         </label>
         <input
           type="date"
           className="form-control"
-          id="dateOfBirth"
-          {...register(`dateOfBirth`, { required: true })}
+          id="catDateOfBirth"
+          {...register(`catDateOfBirth`, { required: true })}
         />
         {errors.dateOfBirth && <span className="text-danger">This field is required</span>}
       </div>

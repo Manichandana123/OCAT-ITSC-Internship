@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { SiteWrapper } from './components';
 import { DashboardBulletin } from './pages/Dashboard/DashboardBulletin';
@@ -14,6 +14,10 @@ const router = createBrowserRouter([
   {
     element: <NewAssessment />,
     path: `/assessment/new`,
+  },
+  {
+    element: <AssessmentList />,
+    path: `/assessment`,
   },
 
 ]);
