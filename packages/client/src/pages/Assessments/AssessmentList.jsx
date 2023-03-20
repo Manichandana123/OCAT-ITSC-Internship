@@ -45,6 +45,12 @@ export const AssessmentList = () => {
       Header: `Updated At`,
       accessor: `updatedAt`,
     },
+    {
+      Cell: ({ row }) =>
+        <button onClick={() => handleDelete(row)}>Delete</button>,
+      Header: `Delete`,
+      accessor: `deletedAt`,
+    },
   ], []);
 
   const {
@@ -54,6 +60,13 @@ export const AssessmentList = () => {
     prepareRow,
     rows,
   } = useTable({ columns, data }, useSortBy, useRowSelect);
+
+  const handleDelete = async (row) => {
+    // // call the AssessmentService.delete function with the given id to delete the assessment
+    await AssessmentService.deleteAssessment(row.original.id);
+    // // update the assessments list by fetching all assessments again
+    setAssessments(await AssessmentService.getList());
+  };
 
   return (
     <div>

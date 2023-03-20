@@ -1,12 +1,12 @@
-import { React, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { React, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { AssessmentService } from '../../services/AssessmentService';
 export const NewAssessment = () => {
 
   const { formState: { errors }, handleSubmit, register, reset } = useForm();
   const [ score, setScore ] = useState(0);
-  const [ riskLevel, setRiskLevel ] = useState(`low`);
+  const navigate = useNavigate();
 
   // create a form that utilizes the "onSubmit" function to send data to
   // packages/client/src/services/AssessmentService.js and then onto the packages/api/src/routes/assessment express API
@@ -21,17 +21,23 @@ export const NewAssessment = () => {
     parseInt(data.hissesAtStrangers);
     setScore(newScore);
 
-    if (newScore >= 4) {
-      setRiskLevel(`high`);
-    } else if (newScore >= 2) {
-      setRiskLevel(`medium`);
+    console.log(newScore);
+
+    let riskLevel = ``;
+    if (newScore >= 0 && newScore <= 1) {
+      riskLevel = `low`;
+    } else if (newScore > 1 && newScore <= 3) {
+      riskLevel = `medium`;
     } else {
-      setRiskLevel(`low`);
+      riskLevel = `high`;
     }
+
+    console.log(riskLevel);
 
     const now = new Date();
     const timezoneOffset = now.getTimezoneOffset();
     const created = new Date(now.getTime() - timezoneOffset * 60 * 1000);
+    console.log(created.toLocaleDateString());
 
     const assessmentData = {
       catDateOfBirth: data.catDateOfBirth,
@@ -45,6 +51,7 @@ export const NewAssessment = () => {
     console.log(`Assessment Data: `, assessmentData);
 
     await AssessmentService.submit(assessmentData);
+    navigate(`/assessment`);
     reset();
   };
 
@@ -138,14 +145,14 @@ export const NewAssessment = () => {
         <p>Hisses at strangers:</p>
         <div className="form-check">
           <input className="form-check-input" type="radio" name="hissesAtStrangers"
-            id="hissesAtStrangers" value="1" {...register(`hissesAtStrangers`, { required: true })} />
+            id="hissesAtStrangers" value="0" {...register(`hissesAtStrangers`, { required: true })} />
           <label className="form-check-label" htmlFor="hissesAtStrangers">
             No
           </label>
         </div>
         <div className="form-check">
           <input className="form-check-input" type="radio" name="hissesAtStrangers"
-            id="hissesAtStrangers" value="0" {...register(`hissesAtStrangers`, { required: true })} />
+            id="hissesAtStrangers" value="1" {...register(`hissesAtStrangers`, { required: true })} />
           <label className="form-check-label" htmlFor="hissesAtStrangers">
             Yes
           </label>
@@ -156,11 +163,7 @@ export const NewAssessment = () => {
       <button type="submit" className="btn btn-primary">
         Submit
       </button>
-      <div className="mt-3">
-        <h5>Assessment Result</h5>
-        <p>Score: {score}</p>
-        <p>Risk Level: {riskLevel}</p>
-      </div>
+
     </form>
   );
 };

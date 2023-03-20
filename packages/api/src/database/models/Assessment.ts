@@ -65,7 +65,9 @@ InferCreationAttributes<Assessment>
       },
       /* eslint-enable sort-keys */
     }, {
+      paranoid: true, // add this line to enable soft delete
       sequelize,
+
     });
 
     return Assessment;

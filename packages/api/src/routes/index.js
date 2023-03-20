@@ -10,5 +10,7 @@ router.use(`/assessment`, assessmentRouter);
 router.use(`/user`, userRouter);
 router.post(`/assessment/submit`, assessmentRouter);
 router.get(`/assessment/list`, assessmentRouter);
+router.post(`/assessment/:id`, assessmentRouter);
+router.post(`/user/login`, userRouter);
 
 module.exports = { router };
